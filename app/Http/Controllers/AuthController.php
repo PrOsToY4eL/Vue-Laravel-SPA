@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Users;
 
 class AuthController extends Controller
 {
@@ -14,6 +15,20 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login']]);
+    }
+    
+    public function register()
+    {
+        $user = Users::create([
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'password' => bcrypt($request->get('password')),
+        ]);
+         
+        $token = JWTAuth::fromUser($user);
+        return response()->json(compact('user','token'),201);
+        //return Response::json(compact('token'));
+        
     }
 
     /**
@@ -28,7 +43,6 @@ class AuthController extends Controller
         if (! $token = auth('api')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-
         return $this->respondWithToken($token);
     }
 
