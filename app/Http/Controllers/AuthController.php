@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Users;
+use Illuminate\Http\Response;
+use App\User;
 
 class AuthController extends Controller
 {
@@ -14,19 +15,46 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        // $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
     
-    public function register()
+    public function register(Request $request)
     {
-        $user = Users::create([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => bcrypt($request->get('password')),
-        ]);
-         
-        $token = JWTAuth::fromUser($user);
-        return response()->json(compact('user','token'),201);
+        //$credentials = request(['email', 'password', 'name', 'corfirmPassword']);
+        
+
+        //return $credentials;
+        $userData = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password'))    
+        ];
+
+        $user = User::create($userData);
+        $response = new Response();
+        $response->setStatusCode(201);
+        $response->setContent($user);
+        return $response;
+
+
+        //return $userData;
+        //*
+        //$user = App\User::create($userData);
+        // $user = new App\User();
+        // $user->name = $request->input('name');
+        // $user->email = $request->input('email');
+        // $user->password = $request->input('password');
+        // $user->save();
+
+        //$users = App\User::all();
+        // if ($user == null)
+        // return 'Ошибка записи в базу даних';
+        //*/
+        // return $user;//$request->get('name');
+
+
+        // $token = JWTAuth::fromUser($user);
+        // return response()->json(compact('user','token'),201);
         //return Response::json(compact('token'));
         
     }

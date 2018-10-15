@@ -11,7 +11,7 @@
                         </div>
                         <div class="form-group row">
                             <label for="email">Name:</label>
-                            <input type="email" v-model="form.name" class="form-control" placeholder="Name">
+                            <input type="text" v-model="form.name" class="form-control" placeholder="Name">
                         </div>
                         <div class="form-group row">
                             <label for="password">Password:</label>
@@ -37,17 +37,17 @@
 </template>
 
 <script>
-import { login } from "../../helpers/auth";
+import { registration } from "../../helpers/auth";
 
 export default {
   name: "register",
   data() {
     return {
       form: {
-        email: "",
-        password: "",
-        corfirmPassword: "",
-        name: ""
+        email: "test@gmail.com",
+        password: "qazwsxedc",
+        corfirmPassword: "qazwsxedc",
+        name: "Yaroslav"
       },
       error: null
     };
@@ -56,13 +56,16 @@ export default {
     register() {
       this.$store.dispatch("register");
 
-      login(this.$data.form)
+      registration(this.$data.form)
         .then(res => {
-          this.$store.commit("loginSuccess", res);
-          this.$router.push({ path: "/" });
+            console.log('Data from server ');
+            console.log(res.data);
+          //this.$store.commit("loginSuccess", res);
+          //this.$router.push({ path: "/" });
         })
         .catch(error => {
-          this.$store.commit("loginFailed", { error });
+          console.log(error);
+          //this.$store.commit("loginFailed", { error });
         });
     }
   },

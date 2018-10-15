@@ -929,6 +929,7 @@ module.exports = defaults;
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["b"] = login;
+/* harmony export (immutable) */ __webpack_exports__["c"] = registration;
 /* harmony export (immutable) */ __webpack_exports__["a"] = getLocalUser;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general__ = __webpack_require__(15);
 
@@ -940,6 +941,17 @@ function login(credentials) {
             res(response.data);
         }).catch(function (err) {
             rej("Wrong email or password");
+        });
+    });
+}
+
+function registration(credentials) {
+    return new Promise(function (res, rej) {
+        axios.post('api/auth/register', credentials).then(function (response) {
+            //setAuthorization(response.data.access_token);
+            res(response);
+        }).catch(function (err) {
+            rej("Your data is invalid: " + err);
         });
     });
 }
@@ -51868,10 +51880,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       form: {
-        email: "",
-        password: "",
-        corfirmPassword: "",
-        name: ""
+        email: "test@gmail.com",
+        password: "qazwsxedc",
+        corfirmPassword: "qazwsxedc",
+        name: "Yaroslav"
       },
       error: null
     };
@@ -51879,15 +51891,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     register: function register() {
-      var _this = this;
-
       this.$store.dispatch("register");
 
-      Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["b" /* login */])(this.$data.form).then(function (res) {
-        _this.$store.commit("loginSuccess", res);
-        _this.$router.push({ path: "/" });
+      Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["c" /* registration */])(this.$data.form).then(function (res) {
+        console.log('Data from server ');
+        console.log(res.data);
+        //this.$store.commit("loginSuccess", res);
+        //this.$router.push({ path: "/" });
       }).catch(function (error) {
-        _this.$store.commit("loginFailed", { error: error });
+        console.log(error);
+        //this.$store.commit("loginFailed", { error });
       });
     }
   },
@@ -51962,7 +51975,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "email", placeholder: "Name" },
+                  attrs: { type: "text", placeholder: "Name" },
                   domProps: { value: _vm.form.name },
                   on: {
                     input: function($event) {
@@ -54297,6 +54310,9 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
         }
     },
     mutations: {
+        register: function register(state) {
+            console.log("register mutation in store");
+        },
         login: function login(state) {
             state.loading = true;
             state.auth_error = null;
@@ -54323,6 +54339,9 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
         }
     },
     actions: {
+        register: function register(context) {
+            context.commit("register");
+        },
         login: function login(context) {
             context.commit("login");
         },

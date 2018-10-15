@@ -13,6 +13,19 @@ export function login(credentials) {
     })
 }
 
+export function registration(credentials){
+    return new Promise((res, rej) => {
+        axios.post('api/auth/register', credentials)
+            .then((response) => {
+                //setAuthorization(response.data.access_token);
+                res(response);
+            })
+            .catch((err) =>{
+                rej("Your data is invalid: " + err);
+            })
+    })
+}
+
 export function getLocalUser() {
     const userStr = localStorage.getItem("user");
 

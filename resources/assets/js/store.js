@@ -28,10 +28,14 @@ export default {
         }
     },
     mutations: {
+        register(state){
+            console.log("register mutation in store");
+        },
         login(state) {
             state.loading = true;
             state.auth_error = null;
         },
+
         loginSuccess(state, payload) {
             state.auth_error = null;
             state.isLoggedIn = true;
@@ -54,6 +58,9 @@ export default {
         }
     },
     actions: {
+        register(context){
+            context.commit("register");
+        },
         login(context) {
             context.commit("login");
         },
