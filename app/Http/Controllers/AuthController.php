@@ -20,8 +20,8 @@ class AuthController extends Controller
     
     public function register(Request $request)
     {
-        //$credentials = request(['email', 'password', 'name', 'corfirmPassword']);
-        
+        $credentials = request(['email', 'password', 'name']);
+
 
         //return $credentials;
         $userData = [
