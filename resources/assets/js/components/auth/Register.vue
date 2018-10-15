@@ -7,19 +7,19 @@
                     <form @submit.prevent="register">
                         <div class="form-group row">
                             <label for="email">Email:</label>
-                            <input type="email" v-model="form.email" class="form-control" placeholder="Email Address">
+                            <input id="email" type="email" v-model="form.email" class="form-control" placeholder="Email Address">
                         </div>
                         <div class="form-group row">
-                            <label for="email">Name:</label>
-                            <input type="text" v-model="form.name" class="form-control" placeholder="Name">
+                            <label for="name">Name:</label>
+                            <input id="name" type="text" v-model="form.name" class="form-control" placeholder="Name">
                         </div>
                         <div class="form-group row">
                             <label for="password">Password:</label>
-                            <input type="password" v-model="form.password" class="form-control" placeholder="Password">
+                            <input id="password" type="password" v-model="form.password" class="form-control" placeholder="Password">
                         </div>
                         <div class="form-group row">
-                            <label for="password">Corfirm password:</label>
-                            <input type="password" v-model="form.corfirmPassword" class="form-control" placeholder="Password">
+                            <label for="confirm">Confirm password:</label>
+                            <input id="confirm" type="password" v-model="form.confirmPassword" class="form-control" placeholder="Password">
                         </div>
                         <div class="form-group row">
                             <input type="submit" value="Register">
@@ -46,7 +46,7 @@ export default {
       form: {
         email: "test@gmail.com",
         password: "qazwsxedc",
-        corfirmPassword: "qazwsxedc",
+        confirmPassword: "qazwsxedc",
         name: "Yaroslav"
       },
       error: null
@@ -58,14 +58,12 @@ export default {
 
       registration(this.$data.form)
         .then(res => {
-            console.log('Data from server ');
-            console.log(res.data);
-          //this.$store.commit("loginSuccess", res);
-          //this.$router.push({ path: "/" });
+            this.$store.commit("registerSuccess", res);
+            this.$router.push({path: '/'});
         })
-        .catch(error => {
-          console.log(error);
-          //this.$store.commit("loginFailed", { error });
+        .catch(err => {
+            console.log("Register error"+err.data);
+          this.$store.commit("registerFailed", err);
         });
     }
   },

@@ -12,14 +12,14 @@ export function initialize(store, router) {
         }
     });
     
-    axios.interceptors.response.use(null, (error) => {
-        if (error.resposne.status == 401) {
-            store.commit('logout');
-            router.push('/login');
-        }
-
-        return Promise.reject(error);
-    });
+    // axios.interceptors.response.use(null, (error) => {
+    //     if (error.resposne.status == 401) {
+    //         store.commit('logout');
+    //         router.push('/login');
+    //     }
+    //
+    //     return Promise.reject(error);
+    // });
 
     if (store.getters.currentUser) {
         setAuthorization(store.getters.currentUser.token);

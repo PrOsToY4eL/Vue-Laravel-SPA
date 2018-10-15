@@ -948,10 +948,11 @@ function login(credentials) {
 function registration(credentials) {
     return new Promise(function (res, rej) {
         axios.post('api/auth/register', credentials).then(function (response) {
-            //setAuthorization(response.data.access_token);
+            Object(__WEBPACK_IMPORTED_MODULE_0__general__["b" /* setAuthorization */])(response.data.access_token);
             res(response);
         }).catch(function (err) {
-            rej("Your data is invalid: " + err);
+            console.log(err);
+            rej(err);
         });
     });
 }
@@ -11846,14 +11847,14 @@ function initialize(store, router) {
         }
     });
 
-    axios.interceptors.response.use(null, function (error) {
-        if (error.resposne.status == 401) {
-            store.commit('logout');
-            router.push('/login');
-        }
-
-        return Promise.reject(error);
-    });
+    // axios.interceptors.response.use(null, (error) => {
+    //     if (error.resposne.status == 401) {
+    //         store.commit('logout');
+    //         router.push('/login');
+    //     }
+    //
+    //     return Promise.reject(error);
+    // });
 
     if (store.getters.currentUser) {
         setAuthorization(store.getters.currentUser.token);
@@ -51882,7 +51883,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       form: {
         email: "test@gmail.com",
         password: "qazwsxedc",
-        corfirmPassword: "qazwsxedc",
+        confirmPassword: "qazwsxedc",
         name: "Yaroslav"
       },
       error: null
@@ -51891,16 +51892,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     register: function register() {
+      var _this = this;
+
       this.$store.dispatch("register");
 
       Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["c" /* registration */])(this.$data.form).then(function (res) {
-        console.log('Data from server ');
-        console.log(res.data);
-        //this.$store.commit("loginSuccess", res);
-        //this.$router.push({ path: "/" });
-      }).catch(function (error) {
-        console.log(error);
-        //this.$store.commit("loginFailed", { error });
+        _this.$store.commit("registerSuccess", res);
+        _this.$router.push({ path: '/' });
+      }).catch(function (err) {
+        console.log("Register error" + err.data);
+        _this.$store.commit("registerFailed", err);
       });
     }
   },
@@ -51949,7 +51950,11 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "email", placeholder: "Email Address" },
+                  attrs: {
+                    id: "email",
+                    type: "email",
+                    placeholder: "Email Address"
+                  },
                   domProps: { value: _vm.form.email },
                   on: {
                     input: function($event) {
@@ -51963,7 +51968,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group row" }, [
-                _c("label", { attrs: { for: "email" } }, [_vm._v("Name:")]),
+                _c("label", { attrs: { for: "name" } }, [_vm._v("Name:")]),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -51975,7 +51980,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "text", placeholder: "Name" },
+                  attrs: { id: "name", type: "text", placeholder: "Name" },
                   domProps: { value: _vm.form.name },
                   on: {
                     input: function($event) {
@@ -52003,7 +52008,11 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "password", placeholder: "Password" },
+                  attrs: {
+                    id: "password",
+                    type: "password",
+                    placeholder: "Password"
+                  },
                   domProps: { value: _vm.form.password },
                   on: {
                     input: function($event) {
@@ -52017,8 +52026,8 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group row" }, [
-                _c("label", { attrs: { for: "password" } }, [
-                  _vm._v("Corfirm password:")
+                _c("label", { attrs: { for: "confirm" } }, [
+                  _vm._v("Confirm password:")
                 ]),
                 _vm._v(" "),
                 _c("input", {
@@ -52026,19 +52035,23 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.form.corfirmPassword,
-                      expression: "form.corfirmPassword"
+                      value: _vm.form.confirmPassword,
+                      expression: "form.confirmPassword"
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "password", placeholder: "Password" },
-                  domProps: { value: _vm.form.corfirmPassword },
+                  attrs: {
+                    id: "confirm",
+                    type: "password",
+                    placeholder: "Password"
+                  },
+                  domProps: { value: _vm.form.confirmPassword },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.$set(_vm.form, "corfirmPassword", $event.target.value)
+                      _vm.$set(_vm.form, "confirmPassword", $event.target.value)
                     }
                   }
                 })
@@ -54311,11 +54324,24 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
     },
     mutations: {
         register: function register(state) {
-            console.log("register mutation in store");
+            state.loading = true;
+            state.auth_error = null;
         },
         login: function login(state) {
             state.loading = true;
             state.auth_error = null;
+        },
+        registerSuccess: function registerSuccess(state, payload) {
+            state.auth_error = null;
+            state.isLoggedIn = true;
+            state.loading = false;
+            state.currentUser = Object.assign({}, payload.user, { token: payload.access_token });
+
+            localStorage.setItem("user", JSON.stringify(state.currentUser));
+        },
+        registerFailed: function registerFailed(state, payload) {
+            state.loading = false;
+            state.auth_error = payload;
         },
         loginSuccess: function loginSuccess(state, payload) {
             state.auth_error = null;

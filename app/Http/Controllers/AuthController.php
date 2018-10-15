@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\User;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\JWTAuth;
+use Validator;
 
 class AuthController extends Controller
 {
@@ -15,42 +18,47 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
     
     public function register(Request $request)
     {
-        $credentials = request(['email', 'password', 'name']);
-
-
-        //return $credentials;
-        $userData = [
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password'=> 'required|min:6'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(),401);
+        }
+        $credentials = [
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password'))    
+            'password' => bcrypt($request->input('password'))
         ];
+        User::create($credentials);
 
-        $user = User::create($userData);
-        $response = new Response();
-        $response->setStatusCode(201);
-        $response->setContent($user);
-        return $response;
+        $credentials = array_except($credentials,['name']);
+
+        if (! $token = auth('api')->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        return $this->respondWithToken($token);
 
 
-        //return $userData;
-        //*
-        //$user = App\User::create($userData);
-        // $user = new App\User();
-        // $user->name = $request->input('name');
-        // $user->email = $request->input('email');
-        // $user->password = $request->input('password');
-        // $user->save();
+//        try {
+//            $user = User::create($credentials);
+//        }
+//        catch ()
+//        //$token = JWTAuth::fromUser($user);
+//
+//        $token = auth('api')->attempt(array_except($credentials, 'name');
+//
+//        return $this->respondWithToken($token);
 
-        //$users = App\User::all();
-        // if ($user == null)
-        // return 'Ошибка записи в базу даних';
-        //*/
-        // return $user;//$request->get('name');
+//        $response = new Response();
+//        $response->setStatusCode(201);
+//        $response->setContent([$user, $token]);
+//        return $response;
 
 
         // $token = JWTAuth::fromUser($user);

@@ -29,13 +29,25 @@ export default {
     },
     mutations: {
         register(state){
-            console.log("register mutation in store");
+            state.loading = true;
+            state.auth_error = null;
         },
         login(state) {
             state.loading = true;
             state.auth_error = null;
         },
+        registerSuccess(state, payload){
+            state.auth_error = null;
+            state.isLoggedIn = true;
+            state.loading = false;
+            state.currentUser = Object.assign({}, payload.user, {token: payload.access_token});
 
+            localStorage.setItem("user", JSON.stringify(state.currentUser));
+        },
+        registerFailed(state, payload){
+            state.loading = false;
+            state.auth_error = payload;
+        },
         loginSuccess(state, payload) {
             state.auth_error = null;
             state.isLoggedIn = true;

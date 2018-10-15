@@ -17,11 +17,12 @@ export function registration(credentials){
     return new Promise((res, rej) => {
         axios.post('api/auth/register', credentials)
             .then((response) => {
-                //setAuthorization(response.data.access_token);
+                setAuthorization(response.data.access_token);
                 res(response);
             })
             .catch((err) =>{
-                rej("Your data is invalid: " + err);
+                console.log(err);
+                rej(err);
             })
     })
 }
