@@ -18,6 +18,10 @@
                             <input type="password" v-model="form.password" class="form-control" placeholder="Password">
                         </div>
                         <div class="form-group row">
+                            <label for="password">Corfirm password:</label>
+                            <input type="password" v-model="form.corfirmPassword" class="form-control" placeholder="Password">
+                        </div>
+                        <div class="form-group row">
                             <input type="submit" value="Register">
                         </div>
                         <div class="form-group row" v-if="authError">
@@ -42,6 +46,7 @@ export default {
       form: {
         email: "",
         password: "",
+        corfirmPassword: "",
         name: ""
       },
       error: null
@@ -49,7 +54,7 @@ export default {
   },
   methods: {
     register() {
-      this.$store.dispatch("login");
+      this.$store.dispatch("register");
 
       login(this.$data.form)
         .then(res => {
