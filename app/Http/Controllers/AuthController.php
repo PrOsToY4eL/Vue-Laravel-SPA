@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\User;
@@ -36,14 +37,31 @@ class AuthController extends Controller
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password'))
         ];
-        User::create($credentials);
+        $user = User::create($credentials);
 
-        $credentials = array_except($credentials,['name']);
-
-        if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if ($user instanceof User) {
+            Auth::login($user);
+            $token = auth('api')->attempt(request(['email', 'password']));
+            return $this->respondWithToken($token);
+//            $response = new Response();
+//            $response->setStatusCode(201);
+//            $response->setContent([$user]);
+//            return $response;
         }
-        return $this->respondWithToken($token);
+
+        $response = new Response();
+        $response->setStatusCode(500);
+        $response->setContent([null]);
+        return $response;
+
+
+
+//        $credentials = array_except($credentials,['name']);
+
+//        if (! $token = auth('api')->attempt($credentials)) {
+//            return response()->json(['error' => 'Unauthorized'], 401);
+//        }
+//        return $this->respondWithToken($token);
 
 
 //        try {

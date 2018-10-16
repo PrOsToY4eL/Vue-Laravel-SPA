@@ -36,15 +36,15 @@
         data() {
             return {
                 form: {
-                    email: '',
-                    password: ''
+                    email: 'test@gmail.com',
+                    password: 'qazwsxedc'
                 },
                 error: null
             };
         },
         methods: {
             authenticate() {
-                this.$store.dispatch('login'); // mutation login in store
+                this.$store.dispatch('login');
 
                 login(this.$data.form)
                     .then((res) => {

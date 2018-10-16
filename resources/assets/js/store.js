@@ -37,6 +37,7 @@ export default {
             state.auth_error = null;
         },
         registerSuccess(state, payload){
+            console.log('registration succes',payload);
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;
@@ -49,6 +50,8 @@ export default {
             state.auth_error = payload;
         },
         loginSuccess(state, payload) {
+            console.log('login succes');
+            console.log(payload);
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;

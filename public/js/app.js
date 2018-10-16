@@ -948,8 +948,9 @@ function login(credentials) {
 function registration(credentials) {
     return new Promise(function (res, rej) {
         axios.post('api/auth/register', credentials).then(function (response) {
+            console.log(response.data.access_token);
             Object(__WEBPACK_IMPORTED_MODULE_0__general__["b" /* setAuthorization */])(response.data.access_token);
-            res(response);
+            res(response.data);
         }).catch(function (err) {
             console.log(err);
             rej(err);
@@ -51591,8 +51592,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             form: {
-                email: '',
-                password: ''
+                email: 'test@gmail.com',
+                password: 'qazwsxedc'
             },
             error: null
         };
@@ -51602,7 +51603,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         authenticate: function authenticate() {
             var _this = this;
 
-            this.$store.dispatch('login'); // mutation login in store
+            this.$store.dispatch('login');
 
             Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["b" /* login */])(this.$data.form).then(function (res) {
                 _this.$store.commit("loginSuccess", res);
@@ -51905,6 +51906,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$store.dispatch("register");
 
       Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["c" /* registration */])(this.$data.form).then(function (res) {
+        console.log(res);
         _this.$store.commit("registerSuccess", res);
         _this.$router.push({ path: '/' });
       }).catch(function (err) {
@@ -54385,6 +54387,7 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
             state.auth_error = null;
         },
         registerSuccess: function registerSuccess(state, payload) {
+            console.log('registration succes', payload);
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;
@@ -54397,6 +54400,8 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
             state.auth_error = payload;
         },
         loginSuccess: function loginSuccess(state, payload) {
+            console.log('login succes');
+            console.log(payload);
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;

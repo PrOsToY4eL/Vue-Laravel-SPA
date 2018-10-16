@@ -17,8 +17,9 @@ export function registration(credentials){
     return new Promise((res, rej) => {
         axios.post('api/auth/register', credentials)
             .then((response) => {
+                console.log(response.data.access_token);
                 setAuthorization(response.data.access_token);
-                res(response);
+                res(response.data);
             })
             .catch((err) =>{
                 console.log(err);
