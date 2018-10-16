@@ -22,12 +22,20 @@
                             <input id="confirm" type="password" v-model="form.confirmPassword" class="form-control" placeholder="Password">
                         </div>
                         <div class="form-group row">
+                            <span class="danger" v-show="!(form.password === form.confirmPassword)">Your confirm password is incorrect</span>
+                            <span class="success"v-show="form.password === form.confirmPassword" >Your confirm password is correct</span>
+                        </div>
+
+                        <div class="form-group row">
                             <input type="submit" value="Register">
                         </div>
                         <div class="form-group row" v-if="authError">
-                            <p class="error">
-                                {{ authError }}
-                            </p>
+                            <span class="error" v-for="(errs, key) in authError">
+                                {{ key }}:
+                                <ul>
+                            <li v-for="err in errs ">{{ err }}</li>
+                        </ul>
+                            </span>
                         </div>
                     </form>
                 </div>
@@ -62,23 +70,28 @@ export default {
             this.$router.push({path: '/'});
         })
         .catch(err => {
-            console.log("Register error"+err.data);
-          this.$store.commit("registerFailed", err);
+          this.$store.commit("registerFailed", err.response.data );
         });
     }
   },
   computed: {
-    authError() {
-      return this.$store.getters.authError;
-    }
+      authError() {
+          return this.$store.getters.authError;
+      },
   }
 };
 </script>
 
 <style scoped>
 .error {
-  text-align: center;
+  text-align: left;
   color: red;
 }
+    .danger {
+        color: red;
+    }
+    .success  {
+        color: green;
+    }
 </style>
 

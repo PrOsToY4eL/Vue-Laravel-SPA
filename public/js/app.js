@@ -51823,7 +51823,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.error[data-v-5f3035c3] {\n  text-align: center;\n  color: red;\n}\n", ""]);
+exports.push([module.i, "\n.error[data-v-5f3035c3] {\n  text-align: left;\n  color: red;\n}\n.danger[data-v-5f3035c3] {\n        color: red;\n}\n.success[data-v-5f3035c3]  {\n        color: green;\n}\n", ""]);
 
 // exports
 
@@ -51835,6 +51835,14 @@ exports.push([module.i, "\n.error[data-v-5f3035c3] {\n  text-align: center;\n  c
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_auth__ = __webpack_require__(6);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -51900,8 +51908,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.$store.commit("registerSuccess", res);
         _this.$router.push({ path: '/' });
       }).catch(function (err) {
-        console.log("Register error" + err.data);
-        _this.$store.commit("registerFailed", err);
+        _this.$store.commit("registerFailed", err.response.data);
       });
     }
   },
@@ -52057,18 +52064,64 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
+              _c("div", { staticClass: "form-group row" }, [
+                _c(
+                  "span",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !(
+                          _vm.form.password === _vm.form.confirmPassword
+                        ),
+                        expression: "!(form.password === form.confirmPassword)"
+                      }
+                    ],
+                    staticClass: "danger"
+                  },
+                  [_vm._v("Your confirm password is incorrect")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.form.password === _vm.form.confirmPassword,
+                        expression: "form.password === form.confirmPassword"
+                      }
+                    ],
+                    staticClass: "success"
+                  },
+                  [_vm._v("Your confirm password is correct")]
+                )
+              ]),
+              _vm._v(" "),
               _vm._m(0),
               _vm._v(" "),
               _vm.authError
-                ? _c("div", { staticClass: "form-group row" }, [
-                    _c("p", { staticClass: "error" }, [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(_vm.authError) +
-                          "\n                        "
-                      )
-                    ])
-                  ])
+                ? _c(
+                    "div",
+                    { staticClass: "form-group row" },
+                    _vm._l(_vm.authError, function(errs, key) {
+                      return _c("span", { staticClass: "error" }, [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(key) +
+                            ":\n                            "
+                        ),
+                        _c(
+                          "ul",
+                          _vm._l(errs, function(err) {
+                            return _c("li", [_vm._v(_vm._s(err))])
+                          })
+                        )
+                      ])
+                    })
+                  )
                 : _vm._e()
             ]
           )

@@ -1,0 +1,57 @@
+{
+  "config": {
+    "transformRequest": {},
+    "transformResponse": {},
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "X-Requested-With": "XMLHttpRequest",
+      "Content-Type": "application/json;charset=utf-8",
+      "X-XSRF-TOKEN": "eyJpdiI6ImxFaFVxUG5teW9PZ0VzNlY0bDVGWkE9PSIsInZhbHVlIjoidkRVN2VjekdKSVZhYWRvWjhyNGozRVF2cVFubTBkN1VObkllOGNOajZ1ZFwvY05OTGMwVGVhNUhiQ1EyYjVEMzciLCJtYWMiOiJlNWFlMGMzNTcwNzRiZjU5YWIyOWM4YzRlYjQ2NzFhYWM5M2ZkZWY3NGZjMzQxMjZhYTQ1MDdmOGYyZmMwYmZkIn0="
+    },
+    "method": "post",
+    "url": "api/auth/register",
+    "data": "{\"email\":\"test@gmail.com\",\"password\":\"qazwsxedc\",\"confirmPassword\":\"qazwsxedc\",\"name\":\"Yaroslav\"}"
+  },
+  "request": {},
+  "response": {
+    "data": {
+      "email": [
+        "The email has already been taken."
+      ]
+    },
+    "status": 401,
+    "statusText": "Unauthorized",
+    "headers": {
+      "cache-control": "no-cache, private",
+      "connection": "close",
+      "content-type": "application/json",
+      "date": "Tue, 16 Oct 2018 05:55:30 +0000, Tue, 16 Oct 2018 05:55:30 GMT",
+      "host": "127.0.0.1:8000",
+      "x-powered-by": "PHP/7.2.10-0ubuntu0.18.04.1",
+      "x-ratelimit-limit": "60",
+      "x-ratelimit-remaining": "59"
+    },
+    "config": {
+      "transformRequest": {},
+      "transformResponse": {},
+      "timeout": 0,
+      "xsrfCookieName": "XSRF-TOKEN",
+      "xsrfHeaderName": "X-XSRF-TOKEN",
+      "maxContentLength": -1,
+      "headers": {
+        "Accept": "application/json, text/plain, */*",
+        "X-Requested-With": "XMLHttpRequest",
+        "Content-Type": "application/json;charset=utf-8",
+        "X-XSRF-TOKEN": "eyJpdiI6ImxFaFVxUG5teW9PZ0VzNlY0bDVGWkE9PSIsInZhbHVlIjoidkRVN2VjekdKSVZhYWRvWjhyNGozRVF2cVFubTBkN1VObkllOGNOajZ1ZFwvY05OTGMwVGVhNUhiQ1EyYjVEMzciLCJtYWMiOiJlNWFlMGMzNTcwNzRiZjU5YWIyOWM4YzRlYjQ2NzFhYWM5M2ZkZWY3NGZjMzQxMjZhYTQ1MDdmOGYyZmMwYmZkIn0="
+      },
+      "method": "post",
+      "url": "api/auth/register",
+      "data": "{\"email\":\"test@gmail.com\",\"password\":\"qazwsxedc\",\"confirmPassword\":\"qazwsxedc\",\"name\":\"Yaroslav\"}"
+    },
+    "request": {}
+  }
+}
