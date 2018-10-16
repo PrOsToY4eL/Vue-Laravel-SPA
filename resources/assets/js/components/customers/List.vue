@@ -31,23 +31,7 @@
     </div>
 </template>
 
-<script>
-    export default {
-        name: 'list',
-        mounted() {
-            if (this.customers.length) {
-                return;
-            }
-            
-            this.$store.dispatch('getCustomers');
-        },
-        computed: {
-            customers() {
-                return this.$store.getters.customers;
-            }
-        }
-    }
-</script>
+<script src="./List.js"></script>
 
 <style scoped>
 .btn-wrapper {

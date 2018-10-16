@@ -46,75 +46,7 @@
     </div>
 </template>
 
-<script>
-    import validate from 'validate.js';
-
-    export default {
-        name: 'new',
-        data() {
-            return {
-                customer: {
-                    name: '',
-                    email: '',
-                    phone: '',
-                    website: ''
-                },
-                errors: null
-            };
-        },
-        computed: {
-            currentUser() {
-                return this.$store.getters.currentUser;
-            }
-        },
-        methods: {
-            add() {
-                this.errors = null;
-
-                const constraints = this.getConstraints();
-
-                const errors = validate(this.$data.customer, constraints);
-
-                if(errors) {
-                    this.errors = errors;
-                    return;
-                }
-
-                axios.post('/api/customers/new', this.$data.customer)
-                    .then((response) => {
-                        this.$router.push('/customers');
-                    });
-            },
-            getConstraints() {
-                return {
-                    name: {
-                        presence: true,
-                        length: {
-                            minimum: 3,
-                            message: 'Must be at least 3 characters long'
-                        }
-                    },
-                    email: {
-                        presence: true,
-                        email: true
-                    },
-                    phone: {
-                        presence: true,
-                        numericality: true,
-                        length: {
-                            minimum: 10,
-                            message: 'Must be at least 10 digits long'
-                        }
-                    },
-                    website: {
-                        presence: true,
-                        url: true
-                    }
-                };
-            }
-        }
-    }
-</script>
+<script src="./New.js"></script>
 
 <style>
 .errors {

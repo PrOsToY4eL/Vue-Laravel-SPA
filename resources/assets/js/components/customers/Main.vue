@@ -14,8 +14,4 @@
     </div>
 </template>
 
-<script>
-    export default {
-        name: 'customers-main'
-    }
-</script>
+<script src="./Main.js"></script>

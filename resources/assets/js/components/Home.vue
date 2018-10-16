@@ -15,13 +15,4 @@
     </div>
 </template>
 
-<script>
-    export default {
-        name: 'home',
-        computed: {
-            welcome() {
-                return this.$store.getters.welcome
-            }
-        }
-    }
-</script>
+<script src="./Home.js"></script>
