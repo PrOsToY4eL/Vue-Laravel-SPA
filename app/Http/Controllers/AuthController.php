@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\RegisterService;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\User;
+use phpDocumentor\Reflection\Types\This;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Exceptions\UserNotCreatedException;
 use Tymon\JWTAuth\JWTAuth;
 use Validator;
 
@@ -32,58 +35,20 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(),401);
         }
-        $credentials = [
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password'))
-        ];
-        $user = User::create($credentials);
-
-        if ($user instanceof User) {
+        try {
+            $user = RegisterService::registerUser($request->all());
             Auth::login($user);
-            $token = auth('api')->attempt(request(['email', 'password']));
+            $token = auth('api')->attempt([
+                'email' => $request->email,
+                'password' => $request->password
+            ]);
             return $this->respondWithToken($token);
-//            $response = new Response();
-//            $response->setStatusCode(201);
-//            $response->setContent([$user]);
-//            return $response;
+        } catch (UserNotCreatedException $e){
+            $response = new Response();
+            $response->setStatusCode(500);
+            $response->setContent(['Errors'=> ['Error: can`t create new user']]);
+            return $response;
         }
-
-        $response = new Response();
-        $response->setStatusCode(500);
-        $response->setContent([null]);
-        return $response;
-
-
-
-//        $credentials = array_except($credentials,['name']);
-
-//        if (! $token = auth('api')->attempt($credentials)) {
-//            return response()->json(['error' => 'Unauthorized'], 401);
-//        }
-//        return $this->respondWithToken($token);
-
-
-//        try {
-//            $user = User::create($credentials);
-//        }
-//        catch ()
-//        //$token = JWTAuth::fromUser($user);
-//
-//        $token = auth('api')->attempt(array_except($credentials, 'name');
-//
-//        return $this->respondWithToken($token);
-
-//        $response = new Response();
-//        $response->setStatusCode(201);
-//        $response->setContent([$user, $token]);
-//        return $response;
-
-
-        // $token = JWTAuth::fromUser($user);
-        // return response()->json(compact('user','token'),201);
-        //return Response::json(compact('token'));
-        
     }
 
     /**

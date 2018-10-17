@@ -28,7 +28,7 @@
     </div>
 </template>
 
-<script src=""></script>
+<script src="./Login.js"></script>
 
 <style scoped>
 .error {
