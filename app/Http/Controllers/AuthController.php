@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\RegisterService;
 use App\Wrappers\UserCreateWrapper;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\User;
-use phpDocumentor\Reflection\Types\This;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Exceptions\UserNotCreatedException;
-use Tymon\JWTAuth\JWTAuth;
+use App\Http\Services\RegisterService;
 use Validator;
 
 class AuthController extends Controller
@@ -37,7 +33,8 @@ class AuthController extends Controller
             return response()->json($validator->errors(),401);
         }
         try {
-            $user = $registerService->registerUser($request->all(), new UserCreateWrapper());
+            $registerService = new RegisterService(new UserCreateWrapper());
+            $user = $registerService->registerUser($request->all());
             Auth::login($user);
             $token = auth('api')->attempt([
                 'email' => $request->email,

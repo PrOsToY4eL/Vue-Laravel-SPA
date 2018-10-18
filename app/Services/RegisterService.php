@@ -11,6 +11,7 @@ namespace App\Http\Services;
 use App\User;
 use App\Exceptions\UserNotCreatedException;
 use App\Wrappers\UserCreateWrapper;
+
 class RegisterService
 {
     private $userCreateWrapper;
