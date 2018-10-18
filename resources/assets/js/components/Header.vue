@@ -25,6 +25,7 @@
                             </a>
 
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <router-link to="/profileedit" class="dropdown-item">Edit Profile</router-link>
                                 <a href="#!" @click.prevent="logout" class="dropdown-item">Logout</a>
                             </div>
                         </li>

@@ -5,42 +5,50 @@ import CustomersMain from "./components/customers/Main.vue";
 import CustomersList from "./components/customers/List.vue";
 import NewCustomer from "./components/customers/New.vue";
 import Customer from "./components/customers/View.vue";
+import ProfileEdit from "./components/ProfileEdit.vue";
 
 export const routes = [
-  {
-    path: "/",
-    component: Home,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: "/login",
-    component: Login
-  },
-  {
-    path: "/register",
-    component: Register
-  },
-  {
-    path: "/customers",
-    component: CustomersMain,
-    meta: {
-      requiresAuth: true
-    },
-    children: [
-      {
+    {
         path: "/",
-        component: CustomersList
-      },
-      {
-        path: "new",
-        component: NewCustomer
-      },
-      {
-        path: ":id",
-        component: Customer
-      }
-    ]
-  }
+        component: Home,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/login",
+        component: Login
+    },
+    {
+        path: "/register",
+        component: Register
+    },
+    {
+        path: '/profileedit',
+        component: ProfileEdit,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/customers",
+        component: CustomersMain,
+        meta: {
+            requiresAuth: true
+        },
+        children: [
+            {
+                path: "/",
+                component: CustomersList
+            },
+            {
+                path: "new",
+                component: NewCustomer
+            },
+            {
+                path: ":id",
+                component: Customer
+            }
+        ]
+    }
 ];
