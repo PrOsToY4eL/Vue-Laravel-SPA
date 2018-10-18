@@ -13,22 +13,33 @@ use App\Exceptions\UserNotCreatedException;
 use App\Wrappers\UserCreateWrapper;
 class RegisterService
 {
+    private $userCreateWrapper;
+
+    /**
+     * RegisterService constructor.
+     * @param UserCreateWrapper $userCreateWrapper
+     */
+    public function __construct(UserCreateWrapper $userCreateWrapper)
+    {
+        $this->userCreateWrapper = $userCreateWrapper;
+    }
+
     /**
      * @param $userData
      * @return User
      * @throws UserNotCreatedException
      */
-    public static function registerUser(array $userData)
+    public function registerUser(array $userData)
     {
         $credentials = [
             'name' => $userData['name'],
             'email' => $userData['email'],
             'password' => bcrypt($userData['password'])
         ];
-        //$user = User::create($credentials);
-        $user = UserCreateWrapper::createUser($credentials);
+        $user = $this->userCreateWrapper->createUser($credentials);
+
         if (!$user instanceof User) {
-            throw new UserNotCreatedException();
+            throw new UserNotCreatedException('User was not created.');
         }
 
         return $user;

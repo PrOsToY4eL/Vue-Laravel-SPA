@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\RegisterService;
+use App\Wrappers\UserCreateWrapper;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -36,7 +37,7 @@ class AuthController extends Controller
             return response()->json($validator->errors(),401);
         }
         try {
-            $user = RegisterService::registerUser($request->all());
+            $user = $registerService->registerUser($request->all(), new UserCreateWrapper());
             Auth::login($user);
             $token = auth('api')->attempt([
                 'email' => $request->email,
