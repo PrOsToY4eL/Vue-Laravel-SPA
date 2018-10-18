@@ -1,5 +1,5 @@
 
-import { edit } from "../helpers/auth";
+import { profileEdit } from "../helpers/auth";
 
 export default {
     name: "profile-edit",
@@ -25,7 +25,7 @@ export default {
         edit() {
             this.$store.dispatch("edit");
 
-            edit(this.$data.form)
+            profileEdit(this.$data.form)
                 .then(res => {
                     console.log(res);
                     this.$store.commit("editSuccess", res);

@@ -28,16 +28,16 @@ export function registration(credentials){
     })
 }
 
-export function edit(credentials){
+export function profileEdit(credentials){
     return new Promise((res, rej) => {
-        axios.post('api/auth/edit', credentials)
+        axios.post('api/profile/edit', credentials)
             .then((response) => {
-                console.log(response.data.access_token);
-                setAuthorization(response.data.access_token);
+                //console.log(response.data.access_token);
+                //setAuthorization(response.data.access_token);
                 res(response.data);
             })
             .catch((err) =>{
-                console.log(err);
+                //console.log(err);
                 rej(err);
             })
     })
