@@ -53,7 +53,7 @@ class AuthController extends Controller
             'password' => bcrypt($request->newPassword)
         ]);
 
-        return response()->json('User data is updated');
+        return response()->json($user);
     }
 
     public function register(Request $request)

@@ -8,8 +8,8 @@ export default {
             form: {
                 email: "",
                 password: "qazwsxedc",
-                newPassword: "12345678",
-                confirmNewPassword: "123456789",
+                newPassword: "qazwsxedc",
+                confirmNewPassword: "qazwsxedc",
                 name: ""
             },
             error: null

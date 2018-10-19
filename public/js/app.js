@@ -52973,8 +52973,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             form: {
                 email: "",
                 password: "qazwsxedc",
-                newPassword: "12345678",
-                confirmNewPassword: "123456789",
+                newPassword: "qazwsxedc",
+                confirmNewPassword: "qazwsxedc",
                 name: ""
             },
             error: null
@@ -53321,9 +53321,14 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;
+            console.log('old state user name - ', state.currentUser.name);
+            state.currentUser = Object.assign({}, payload, { token: state.currentUser.token });
+            console.log('new state user name - ', state.currentUser.name);
+
+            localStorage.setItem("user", JSON.stringify(state.currentUser));
         },
         editFailed: function editFailed(state, payload) {
-            console.log('edit success with payload', payload);
+            console.log('edit failed with payload', payload);
             state.loading = false;
             state.auth_error = payload;
         },

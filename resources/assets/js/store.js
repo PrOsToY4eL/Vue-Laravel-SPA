@@ -37,9 +37,14 @@ export default {
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;
+            console.log('old state user name - ', state.currentUser.name);
+            state.currentUser = Object.assign({}, payload, {token: state.currentUser.token});
+            console.log('new state user name - ', state.currentUser.name);
+
+            localStorage.setItem("user", JSON.stringify(state.currentUser));
         },
         editFailed(state, payload){
-            console.log('edit success with payload', payload);
+            console.log('edit failed with payload', payload);
             state.loading = false;
             state.auth_error = payload;
         },
