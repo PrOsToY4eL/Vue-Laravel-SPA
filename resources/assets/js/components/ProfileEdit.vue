@@ -14,8 +14,8 @@
                             <input id="name" type="text" v-model="form.name" class="form-control" placeholder="Name">
                         </div>
                         <div class="form-group row">
-                            <label for="current-password">Password:</label>
-                            <input id="current-password" type="password" v-model="form.currentPassword" class="form-control" placeholder="Current password">
+                            <label for="password">Password:</label>
+                            <input id="password" type="password" v-model="form.password" class="form-control" placeholder="Current password">
                         </div>
                         <div class="form-group row">
                             <label for="new-password">New password:</label>

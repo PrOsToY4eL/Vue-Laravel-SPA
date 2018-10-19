@@ -7,7 +7,7 @@ export default {
         return {
             form: {
                 email: "",
-                currentPassword: "qazwsxedc",
+                password: "qazwsxedc",
                 newPassword: "12345678",
                 confirmNewPassword: "123456789",
                 name: ""

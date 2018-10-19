@@ -51825,7 +51825,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$store.dispatch("register");
 
             Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["d" /* registration */])(this.$data.form).then(function (res) {
-                console.log(res);
                 _this.$store.commit("registerSuccess", res);
                 _this.$router.push({ path: '/' });
             }).catch(function (err) {
@@ -52973,7 +52972,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             form: {
                 email: "",
-                currentPassword: "qazwsxedc",
+                password: "qazwsxedc",
                 newPassword: "12345678",
                 confirmNewPassword: "123456789",
                 name: ""
@@ -53092,7 +53091,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group row" }, [
-                _c("label", { attrs: { for: "current-password" } }, [
+                _c("label", { attrs: { for: "password" } }, [
                   _vm._v("Password:")
                 ]),
                 _vm._v(" "),
@@ -53101,23 +53100,23 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.form.currentPassword,
-                      expression: "form.currentPassword"
+                      value: _vm.form.password,
+                      expression: "form.password"
                     }
                   ],
                   staticClass: "form-control",
                   attrs: {
-                    id: "current-password",
+                    id: "password",
                     type: "password",
                     placeholder: "Current password"
                   },
-                  domProps: { value: _vm.form.currentPassword },
+                  domProps: { value: _vm.form.password },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.$set(_vm.form, "currentPassword", $event.target.value)
+                      _vm.$set(_vm.form, "password", $event.target.value)
                     }
                   }
                 })
