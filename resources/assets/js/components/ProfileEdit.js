@@ -27,7 +27,7 @@ export default {
 
             profileEdit(this.$data.form)
                 .then(res => {
-                    console.log(res);
+                    console.log('profile result edit', res);
                     this.$store.commit("editSuccess", res);
                     this.$router.push({path: '/'});
                 })

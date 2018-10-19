@@ -825,7 +825,8 @@ module.exports = g;
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["b"] = login;
-/* harmony export (immutable) */ __webpack_exports__["c"] = registration;
+/* harmony export (immutable) */ __webpack_exports__["d"] = registration;
+/* harmony export (immutable) */ __webpack_exports__["c"] = profileEdit;
 /* harmony export (immutable) */ __webpack_exports__["a"] = getLocalUser;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general__ = __webpack_require__(14);
 
@@ -849,6 +850,19 @@ function registration(credentials) {
             res(response.data);
         }).catch(function (err) {
             console.log(err);
+            rej(err);
+        });
+    });
+}
+
+function profileEdit(credentials) {
+    return new Promise(function (res, rej) {
+        axios.post('api/profile/edit', credentials).then(function (response) {
+            //console.log(response.data.access_token);
+            //setAuthorization(response.data.access_token);
+            res(response.data);
+        }).catch(function (err) {
+            //console.log(err);
             rej(err);
         });
     });
@@ -51810,7 +51824,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.$store.dispatch("register");
 
-            Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["c" /* registration */])(this.$data.form).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["d" /* registration */])(this.$data.form).then(function (res) {
                 console.log(res);
                 _this.$store.commit("registerSuccess", res);
                 _this.$router.push({ path: '/' });
@@ -52980,8 +52994,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.$store.dispatch("edit");
 
-            Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["c" /* registration */])(this.$data.form).then(function (res) {
-                console.log(res);
+            Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["c" /* profileEdit */])(this.$data.form).then(function (res) {
+                console.log('profile result edit', res);
                 _this.$store.commit("editSuccess", res);
                 _this.$router.push({ path: '/' });
             }).catch(function (err) {
@@ -53250,7 +53264,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-group row" }, [
-      _c("input", { attrs: { type: "submit", value: "Register" } })
+      _c("input", { attrs: { type: "submit", value: "Edit profile" } })
     ])
   }
 ]
@@ -53299,6 +53313,21 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
         }
     },
     mutations: {
+        edit: function edit(state) {
+            state.loading = true;
+            state.auth_error = null;
+        },
+        editSuccess: function editSuccess(state, payload) {
+            console.log('edit success with payload', payload);
+            state.auth_error = null;
+            state.isLoggedIn = true;
+            state.loading = false;
+        },
+        editFailed: function editFailed(state, payload) {
+            console.log('edit success with payload', payload);
+            state.loading = false;
+            state.auth_error = payload;
+        },
         register: function register(state) {
             state.loading = true;
             state.auth_error = null;
@@ -53308,7 +53337,6 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
             state.auth_error = null;
         },
         registerSuccess: function registerSuccess(state, payload) {
-            console.log('registration succes', payload);
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;
@@ -53321,8 +53349,6 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
             state.auth_error = payload;
         },
         loginSuccess: function loginSuccess(state, payload) {
-            console.log('login succes');
-            console.log(payload);
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;
@@ -53344,6 +53370,9 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
         }
     },
     actions: {
+        edit: function edit(context) {
+            context.commit("edit");
+        },
         register: function register(context) {
             context.commit("register");
         },

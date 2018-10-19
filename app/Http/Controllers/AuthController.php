@@ -21,7 +21,29 @@ class AuthController extends Controller
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
-    
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function edit(Request $request)
+    {
+
+        return response()->json(['success']);
+
+        $user = $this->guard()->user();
+        $validator = Validator::make($request->all(), [
+            'name' => 'string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+            'password'=> 'required|min:6'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(),401);
+        }
+
+
+    }
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [

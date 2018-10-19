@@ -25,7 +25,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
 
 Route::group(['prefix' => 'profile'], function ($rooter) {
 
-   Route::post('edit', 'UserController@edit');
+   Route::post('edit', 'AuthController@edit');
 
 });
 

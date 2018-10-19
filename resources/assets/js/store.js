@@ -28,6 +28,21 @@ export default {
         }
     },
     mutations: {
+        edit(state){
+            state.loading = true;
+            state.auth_error = null;
+        },
+        editSuccess(state, payload){
+            console.log('edit success with payload', payload);
+            state.auth_error = null;
+            state.isLoggedIn = true;
+            state.loading = false;
+        },
+        editFailed(state, payload){
+            console.log('edit success with payload', payload);
+            state.loading = false;
+            state.auth_error = payload;
+        },
         register(state){
             state.loading = true;
             state.auth_error = null;
@@ -37,7 +52,6 @@ export default {
             state.auth_error = null;
         },
         registerSuccess(state, payload){
-            console.log('registration succes',payload);
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;
@@ -50,8 +64,6 @@ export default {
             state.auth_error = payload;
         },
         loginSuccess(state, payload) {
-            console.log('login succes');
-            console.log(payload);
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;
@@ -73,6 +85,9 @@ export default {
         }
     },
     actions: {
+        edit(context){
+          context.commit("edit");
+        },
         register(context){
             context.commit("register");
         },

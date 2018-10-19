@@ -20,7 +20,6 @@ export default {
 
             registration(this.$data.form)
                 .then(res => {
-                    console.log(res);
                     this.$store.commit("registerSuccess", res);
                     this.$router.push({path: '/'});
                 })
