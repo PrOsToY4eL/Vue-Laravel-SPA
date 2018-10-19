@@ -22,7 +22,7 @@ class UserValidationService
      * @param int $id
      * @return string
      */
-    private function emailRule(int $id):string
+    private function emailRule(int $id = null):string
     {
         return ($id === null) ? self::EMAIL_RULE : self::EMAIL_RULE . ',email,' . $id;
     }
@@ -39,7 +39,6 @@ class UserValidationService
             'name' => self::NAME_RULE,
             'email' => self::emailRule($id),
             'password'=> self::PASSWORD_RULE,
-            'newPassword' => self::PASSWORD_RULE
         ]);
         if ($this->validator->fails()){
             throw new ValidationFaildException();
