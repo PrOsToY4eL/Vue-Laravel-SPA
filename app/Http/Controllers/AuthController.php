@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Exceptions\UserNotCreatedException;
 use App\Http\Services\RegisterService;
+use Storage;
 use Validator;
 
 class AuthController extends Controller
@@ -36,6 +37,9 @@ class AuthController extends Controller
         $path = $request->file('avatar')->storeAs(
             'avatars', 'users_avatar_'.$request->user()->id.'.'.$request->imgExtension
         );
+        Storage::setVisibility($path,'public');
+
+        return $path;
         try {
             /** @var User $user */
             $user = $this->guard()->user();
