@@ -45,9 +45,14 @@ class UserValidationService
         }
     }
 
+    /**
+     * @return array
+     */
     public function errors()
     {
-        return $this->validator->errors();
+        if ($this->validator instanceof Validator)
+            return $this->validator->errors();
+        else [];
     }
 
 }

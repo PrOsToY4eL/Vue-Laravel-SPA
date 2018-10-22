@@ -6,6 +6,10 @@
                 <div class="card-body">
                     <form @submit.prevent="edit">
                         <div class="form-group row">
+                            <input id="avatar" type="file" v-on:change="uploadFile" class="form-control"
+                                   placeholder="Upload your avatar">
+                        </div>
+                        <div class="form-group row">
                             <label for="email">Email:</label>
                             <input id="email" type="email" v-model="form.email" class="form-control" placeholder="Email Address">
                         </div>

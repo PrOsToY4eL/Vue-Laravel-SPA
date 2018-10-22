@@ -33,6 +33,9 @@ class AuthController extends Controller
      */
     public function edit(Request $request)
     {
+        $path = $request->file('avatar')->storeAs(
+            'avatars', 'users_avatar_'.$request->user()->id.'.'.$request->imgExtension
+        );
         try {
             /** @var User $user */
             $user = $this->guard()->user();

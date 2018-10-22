@@ -52977,23 +52977,64 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 confirmNewPassword: "qazwsxedc",
                 name: ""
             },
+            imgExtension: '',
             error: null
         };
     },
     mounted: function mounted() {
-        console.log("profile edit mounted");
         var user = this.$store.getters.currentUser;
         this.form.email = user.email;
         this.form.name = user.name;
     },
 
     methods: {
+        uploadFile: function uploadFile(event) {
+            this.imgExtension = event.target.files[0].name.split('.').pop();
+        },
         edit: function edit() {
             var _this = this;
 
+            var formData = new FormData();
+            formData.append('email', this.form.email);
+            formData.append('password', this.form.password);
+            formData.append('newPassword', this.form.newPassword);
+            formData.append('confirmNewPassword', this.form.confirmNewPassword);
+            formData.append('name', this.form.name);
+            formData.append('imgExtension', this.imgExtension);
+
+            var avatar = document.getElementById('avatar');
+
+            formData.append('avatar', avatar.files[0]);
+
+            // Display the key/value pairs
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = formData.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var pair = _step.value;
+
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
             this.$store.dispatch("edit");
 
-            Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["c" /* profileEdit */])(this.$data.form).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["c" /* profileEdit */])(formData).then(function (res) {
                 console.log('profile result edit', res);
                 _this.$store.commit("editSuccess", res);
                 _this.$router.push({ path: '/' });
@@ -53034,6 +53075,18 @@ var render = function() {
               }
             },
             [
+              _c("div", { staticClass: "form-group row" }, [
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: {
+                    id: "avatar",
+                    type: "file",
+                    placeholder: "Upload your avatar"
+                  },
+                  on: { change: _vm.uploadFile }
+                })
+              ]),
+              _vm._v(" "),
               _c("div", { staticClass: "form-group row" }, [
                 _c("label", { attrs: { for: "email" } }, [_vm._v("Email:")]),
                 _vm._v(" "),
@@ -53317,18 +53370,14 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
             state.auth_error = null;
         },
         editSuccess: function editSuccess(state, payload) {
-            console.log('edit success with payload', payload);
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;
-            console.log('old state user name - ', state.currentUser.name);
             state.currentUser = Object.assign({}, payload, { token: state.currentUser.token });
-            console.log('new state user name - ', state.currentUser.name);
 
             localStorage.setItem("user", JSON.stringify(state.currentUser));
         },
         editFailed: function editFailed(state, payload) {
-            console.log('edit failed with payload', payload);
             state.loading = false;
             state.auth_error = payload;
         },
