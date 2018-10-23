@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ValidationFaildException;
+use App\Services\UserValidationService;
 use App\User;
 use App\Wrappers\UserCreateWrapper;
 use Auth;
@@ -10,6 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Exceptions\UserNotCreatedException;
 use App\Http\Services\RegisterService;
+use Illuminate\Support\Facades\Input;
+use Image;
+use Storage;
 use Validator;
 
 class AuthController extends Controller
@@ -24,37 +29,6 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function edit(Request $request)
-    {
-        /** @var User $user */
-        $user = $this->guard()->user();
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-            'password'=> 'required|min:6',
-            'newPassword' => 'required|min:6'
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(),401);
-        }
-        if (!Hash::check($request->password, $user->password))
-        {
-            return response()->json(['errors' => ['Old password is invalid']], 401);
-        }
-
-        $user->update([
-            'email' => $request->email,
-            'name' => $request->name,
-            'password' => bcrypt($request->newPassword)
-        ]);
-
-        return response()->json($user);
-    }
 
     public function register(Request $request)
     {

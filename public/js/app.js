@@ -52977,26 +52977,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 confirmNewPassword: "qazwsxedc",
                 name: ""
             },
+            avatarPath: null,
             error: null
         };
     },
     mounted: function mounted() {
-        console.log("profile edit mounted");
-        var user = this.$store.getters.currentUser;
-        this.form.email = user.email;
-        this.form.name = user.name;
+        this.setUp();
     },
 
     methods: {
+        setUp: function setUp() {
+            var user = this.$store.getters.currentUser;
+            this.form.email = user.email;
+            this.form.name = user.name;
+            this.avatarPath = user.avatar;
+            console.log('setup maethod ', this.avatarPath);
+        },
         edit: function edit() {
             var _this = this;
 
+            var formData = new FormData();
+            formData.append('email', this.form.email);
+            formData.append('password', this.form.password);
+            formData.append('newPassword', this.form.newPassword);
+            formData.append('confirmNewPassword', this.form.confirmNewPassword);
+            formData.append('name', this.form.name);
+
+            var avatar = document.getElementById('avatar');
+
+            formData.append('avatar', avatar.files[0]);
+
             this.$store.dispatch("edit");
 
-            Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["c" /* profileEdit */])(this.$data.form).then(function (res) {
+            Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["c" /* profileEdit */])(formData).then(function (res) {
                 console.log('profile result edit', res);
+                _this.imgPath = res.avatar;
                 _this.$store.commit("editSuccess", res);
-                _this.$router.push({ path: '/' });
+                _this.setUp();
+                //this.$router.push({path: '/'});
             }).catch(function (err) {
                 _this.$store.commit("editFailed", err.response.data);
             });
@@ -53034,6 +53052,10 @@ var render = function() {
               }
             },
             [
+              _c("img", { attrs: { src: _vm.avatarPath, alt: "Avatar" } }),
+              _vm._v(" "),
+              _vm._m(0),
+              _vm._v(" "),
               _c("div", { staticClass: "form-group row" }, [
                 _c("label", { attrs: { for: "email" } }, [_vm._v("Email:")]),
                 _vm._v(" "),
@@ -53227,7 +53249,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._m(0),
+              _vm._m(1),
               _vm._v(" "),
               _vm.authError
                 ? _c(
@@ -53258,6 +53280,17 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group row" }, [
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { id: "avatar", type: "file", placeholder: "Upload your avatar" }
+      })
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -53317,18 +53350,14 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
             state.auth_error = null;
         },
         editSuccess: function editSuccess(state, payload) {
-            console.log('edit success with payload', payload);
             state.auth_error = null;
             state.isLoggedIn = true;
             state.loading = false;
-            console.log('old state user name - ', state.currentUser.name);
             state.currentUser = Object.assign({}, payload, { token: state.currentUser.token });
-            console.log('new state user name - ', state.currentUser.name);
 
             localStorage.setItem("user", JSON.stringify(state.currentUser));
         },
         editFailed: function editFailed(state, payload) {
-            console.log('edit failed with payload', payload);
             state.loading = false;
             state.auth_error = payload;
         },
