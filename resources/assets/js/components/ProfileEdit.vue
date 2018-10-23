@@ -5,7 +5,7 @@
                 <div class="card-header">Profile Edit</div>
                 <div class="card-body">
                     <form @submit.prevent="edit">
-                        <img :src="imgPath" height="300" width="300" alt="Avatar">
+                        <img :src="avatarPath" alt="Avatar">
                         <div class="form-group row">
                             <input id="avatar" type="file" class="form-control"
                                    placeholder="Upload your avatar">

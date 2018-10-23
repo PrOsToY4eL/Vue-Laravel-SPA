@@ -12,17 +12,21 @@ export default {
                 confirmNewPassword: "qazwsxedc",
                 name: ""
             },
-            imgPath: '',
+            avatarPath: null,
             error: null
         };
     },
-    mounted() {
-      let user = this.$store.getters.currentUser;
-      this.form.email = user.email;
-      this.form.name = user.name;
-      this.imgPath = user.avatar;
+    mounted(){
+      this.setUp();
     },
     methods: {
+        setUp(){
+            let user = this.$store.getters.currentUser;
+            this.form.email = user.email;
+            this.form.name = user.name;
+            this.avatarPath =  user.avatar;
+            console.log('setup maethod ',this.avatarPath);
+        },
         edit() {
             let formData = new FormData();
             formData.append('email', this.form.email);
@@ -42,6 +46,7 @@ export default {
                     console.log('profile result edit', res);
                     this.imgPath = res.avatar;
                     this.$store.commit("editSuccess", res);
+                    this.setUp();
                     //this.$router.push({path: '/'});
                 })
                 .catch(err => {

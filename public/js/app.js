@@ -52977,18 +52977,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 confirmNewPassword: "qazwsxedc",
                 name: ""
             },
-            imgPath: '',
+            avatarPath: null,
             error: null
         };
     },
     mounted: function mounted() {
-        var user = this.$store.getters.currentUser;
-        this.form.email = user.email;
-        this.form.name = user.name;
-        this.imgPath = user.avatar;
+        this.setUp();
     },
 
     methods: {
+        setUp: function setUp() {
+            var user = this.$store.getters.currentUser;
+            this.form.email = user.email;
+            this.form.name = user.name;
+            this.avatarPath = user.avatar;
+            console.log('setup maethod ', this.avatarPath);
+        },
         edit: function edit() {
             var _this = this;
 
@@ -53009,6 +53013,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log('profile result edit', res);
                 _this.imgPath = res.avatar;
                 _this.$store.commit("editSuccess", res);
+                _this.setUp();
                 //this.$router.push({path: '/'});
             }).catch(function (err) {
                 _this.$store.commit("editFailed", err.response.data);
@@ -53047,14 +53052,7 @@ var render = function() {
               }
             },
             [
-              _c("img", {
-                attrs: {
-                  src: _vm.imgPath,
-                  height: "300",
-                  width: "300",
-                  alt: "Avatar"
-                }
-              }),
+              _c("img", { attrs: { src: _vm.avatarPath, alt: "Avatar" } }),
               _vm._v(" "),
               _vm._m(0),
               _vm._v(" "),

@@ -29,59 +29,6 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\ValidationFaildException
-     */
-    public function edit(Request $request)
-    {
-        /** @var User $user */
-        $user = $this->guard()->user();
-
-        if ($request->hasFile('avatar')) {
-            if ($user->avatar !== 'storage/avatars/default.png'){
-                Storage::delete($user->avatar);
-                return $user->avatar;
-            }
-
-            $avatar = $request->file('avatar');
-            $image = Image::make($avatar);
-            $square = ($image->width() < $image->height()) ? $image->width() : $image->height();
-            $image->resize($square, $square)
-                ->save('storage/avatars/user_'.$user->id.'.'.$avatar->getClientOriginalExtension());
-            /*
-
-            $path = $request->file('avatar')->storeAs(
-                'public/avatars', $image->getClientOriginalName()
-            );
-            */
-            $user->avatar = 'storage/avatars/user_'.$user->id.'.'.$avatar->getClientOriginalExtension();
-            $user->save();
-
-        }
-        try {
-
-            $userValidationService = new UserValidationService();
-            $userValidationService->validateUser($request->all(), $user->id);
-        }
-        catch (ValidationFaildException $e){
-            return response()->json($userValidationService->errors(),401);
-        }
-
-        if (!Hash::check($request->password, $user->password))
-        {
-            return response()->json(['errors' => ['Old password is invalid']], 401);
-        }
-
-        $user->update([
-            'email' => $request->email,
-            'name' => $request->name,
-            'password' => bcrypt($request->newPassword)
-        ]);
-
-        return response()->json($user);
-    }
 
     public function register(Request $request)
     {
