@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Exceptions\UserNotCreatedException;
 use App\Http\Services\RegisterService;
+use Illuminate\Support\Facades\Input;
+use Image;
 use Storage;
 use Validator;
 
@@ -34,15 +36,32 @@ class AuthController extends Controller
      */
     public function edit(Request $request)
     {
-        $path = $request->file('avatar')->storeAs(
-            'avatars', 'users_avatar_'.$request->user()->id.'.'.$request->imgExtension
-        );
-        Storage::setVisibility($path,'public');
+        /** @var User $user */
+        $user = $this->guard()->user();
 
-        return $path;
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar !== 'storage/avatars/default.png'){
+                Storage::delete($user->avatar);
+                return $user->avatar;
+            }
+
+            $avatar = $request->file('avatar');
+            $image = Image::make($avatar);
+            $square = ($image->width() < $image->height()) ? $image->width() : $image->height();
+            $image->resize($square, $square)
+                ->save('storage/avatars/user_'.$user->id.'.'.$avatar->getClientOriginalExtension());
+            /*
+
+            $path = $request->file('avatar')->storeAs(
+                'public/avatars', $image->getClientOriginalName()
+            );
+            */
+            $user->avatar = 'storage/avatars/user_'.$user->id.'.'.$avatar->getClientOriginalExtension();
+            $user->save();
+
+        }
         try {
-            /** @var User $user */
-            $user = $this->guard()->user();
+
             $userValidationService = new UserValidationService();
             $userValidationService->validateUser($request->all(), $user->id);
         }

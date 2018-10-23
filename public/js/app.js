@@ -52977,7 +52977,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 confirmNewPassword: "qazwsxedc",
                 name: ""
             },
-            imgExtension: '',
+            imgPath: '',
             error: null
         };
     },
@@ -52985,12 +52985,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var user = this.$store.getters.currentUser;
         this.form.email = user.email;
         this.form.name = user.name;
+        this.imgPath = user.avatar;
     },
 
     methods: {
-        uploadFile: function uploadFile(event) {
-            this.imgExtension = event.target.files[0].name.split('.').pop();
-        },
         edit: function edit() {
             var _this = this;
 
@@ -53000,44 +52998,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             formData.append('newPassword', this.form.newPassword);
             formData.append('confirmNewPassword', this.form.confirmNewPassword);
             formData.append('name', this.form.name);
-            formData.append('imgExtension', this.imgExtension);
 
             var avatar = document.getElementById('avatar');
 
             formData.append('avatar', avatar.files[0]);
 
-            // Display the key/value pairs
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = formData.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var pair = _step.value;
-
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-
             this.$store.dispatch("edit");
 
             Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["c" /* profileEdit */])(formData).then(function (res) {
                 console.log('profile result edit', res);
+                _this.imgPath = res.avatar;
                 _this.$store.commit("editSuccess", res);
-                _this.$router.push({ path: '/' });
+                //this.$router.push({path: '/'});
             }).catch(function (err) {
                 _this.$store.commit("editFailed", err.response.data);
             });
@@ -53075,17 +53047,16 @@ var render = function() {
               }
             },
             [
-              _c("div", { staticClass: "form-group row" }, [
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: {
-                    id: "avatar",
-                    type: "file",
-                    placeholder: "Upload your avatar"
-                  },
-                  on: { change: _vm.uploadFile }
-                })
-              ]),
+              _c("img", {
+                attrs: {
+                  src: _vm.imgPath,
+                  height: "300",
+                  width: "300",
+                  alt: "Avatar"
+                }
+              }),
+              _vm._v(" "),
+              _vm._m(0),
               _vm._v(" "),
               _c("div", { staticClass: "form-group row" }, [
                 _c("label", { attrs: { for: "email" } }, [_vm._v("Email:")]),
@@ -53280,7 +53251,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._m(0),
+              _vm._m(1),
               _vm._v(" "),
               _vm.authError
                 ? _c(
@@ -53311,6 +53282,17 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group row" }, [
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { id: "avatar", type: "file", placeholder: "Upload your avatar" }
+      })
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
