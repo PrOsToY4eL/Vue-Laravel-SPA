@@ -16,18 +16,19 @@ class UploadFileService
 {
 
     /**
-     * @param File $avatar
-     * @param $user_id
+     * @param UploadedFile $avatar
+     * @param int $user_id
      * @return string
      */
-    public static function uploadUserAvatar(UploadedFile $avatar, $user_id):string
+    public static function uploadUserAvatar(UploadedFile $avatar, int $user_id):string
     {
         $image = Image::make($avatar);
         $square = ($image->width() > $image->height()) ? $image->width() : $image->height();
         $coef = ($square > 300) ? 300 / $square : 1;
+        $basePath = '/storage/avatars/user_' . $user_id . '.' . $avatar->getClientOriginalExtension();
         $image->resize($image->width() * $coef, $image->height() * $coef)
-            ->save('storage/avatars/user_' . $user_id . '.' . $avatar->getClientOriginalExtension());
+            ->save(public_path().$basePath);
 
-        return $image->basePath();
+        return $basePath;
     }
 }
