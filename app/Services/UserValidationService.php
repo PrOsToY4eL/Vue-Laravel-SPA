@@ -40,7 +40,7 @@ class UserValidationService
             'name' => self::NAME_RULE,
             'email' => self::emailRule($id),
             'password'=> self::PASSWORD_RULE,
-            'newPassword' => 'nullable|'.self::PASSWORD_RULE,
+            'newPassword' => 'sometimes|'.self::PASSWORD_RULE,
             'avatar' => self::AVATAR_RULE
         ]);
         if ($this->validator->fails()){
@@ -53,7 +53,7 @@ class UserValidationService
      */
     public function errors()
     {
-        return $this->validator->errors();
+        return $this->validator->errors()->toArray();
     }
 
 }

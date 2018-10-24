@@ -31,23 +31,19 @@ class UserValidationTest extends TestCase
 
     /**
      * @return void
-     * @throws ValidationFaildException
      */
     public function testWrongCredentials()
     {
-        $credentials = self::WRONG_CREDENTIALS;
         $this->expectException(ValidationFaildException::class);
 
-        $this->userValidationService->validateUser($credentials);
+        $this->userValidationService->validateUser(self::WRONG_CREDENTIALS);
     }
 
     /**
-     * @throws ValidationFaildException
      */
     public function testSuccessCredentials()
     {
-        $credentials = self::CREDENTIALS;
-        $this->userValidationService->validateUser($credentials);
+        $this->userValidationService->validateUser(self::CREDENTIALS);
 
         $this->assertEmpty($this->userValidationService->errors());
     }
