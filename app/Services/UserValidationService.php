@@ -13,7 +13,7 @@ class UserValidationService
     private const NAME_RULE = 'required|string|max:255';
     private const EMAIL_RULE = 'required|string|email|max:255|unique:users';
     private const PASSWORD_RULE = 'required|min:6';
-    private const AVATAR_RULE = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048';
+    private const AVATAR_RULE = 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048';
 
     /**
      * @var Validator $validator

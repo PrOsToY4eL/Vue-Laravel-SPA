@@ -29,17 +29,16 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
-
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'password'=> 'required|min:6'
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(),401);
+        try {
+            /** @var UserValidationService $userValidationService */
+            $userValidationService = new UserValidationService();
+            $userValidationService->validateUser($request->all());
+        } catch (ValidationFaildException $e) {
+            return response()->json($userValidationService->errors(), 500);
         }
+
         try {
             $registerService = new RegisterService(new UserCreateWrapper());
             $user = $registerService->registerUser($request->all());

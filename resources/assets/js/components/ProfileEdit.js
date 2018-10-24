@@ -1,5 +1,6 @@
 
 import { profileEdit } from "../helpers/auth";
+import { getFormData } from "../helpers/general";
 
 export default {
     name: "profile-edit",
@@ -25,21 +26,9 @@ export default {
             this.form.email = user.email;
             this.form.name = user.name;
             this.avatarPath =  user.avatar;
-            console.log('setup maethod ',this.avatarPath);
         },
         edit() {
-            let formData = new FormData();
-            formData.append('email', this.form.email);
-            formData.append('password', this.form.password);
-            formData.append('newPassword', this.form.newPassword);
-            formData.append('confirmNewPassword', this.form.confirmNewPassword);
-            formData.append('name', this.form.name);
-
-            let avatar = document.getElementById('avatar');
-            if (avatar.files[0] !== undefined)
-                formData.append('avatar', avatar.files[0]);
-            else
-                formData.append('avatar', '');
+            let formData = getFormData(this.$data, document.getElementById('avatar'));
 
             this.$store.dispatch("edit");
 
