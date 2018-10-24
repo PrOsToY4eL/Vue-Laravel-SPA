@@ -21,7 +21,6 @@ class UsersController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\ValidationFaildException
      */
     public function edit(Request $request)
     {
