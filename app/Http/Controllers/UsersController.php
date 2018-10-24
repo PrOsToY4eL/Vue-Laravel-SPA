@@ -32,7 +32,7 @@ class UsersController extends Controller
             $userValidationService = new UserValidationService();
             $userValidationService->validateUser($request->all(), $user->id);
         } catch (ValidationFaildException $e) {
-            return response()->json($userValidationService->errors(), 401);
+            return response()->json($userValidationService->errors(), 500);
         }
 
         if ($request->hasFile('avatar')) {
@@ -48,7 +48,7 @@ class UsersController extends Controller
         $user->save();
 
         if (!Hash::check($request->password, $user->password)) {
-            return response()->json(['errors' => ['Old password is invalid']], 401);
+            return response()->json(['errors' => ['Old password is invalid']], 500);
         }
 
         $user->update([
