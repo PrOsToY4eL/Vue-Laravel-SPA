@@ -8,6 +8,7 @@
 
 namespace App\Http\Services;
 
+use App\Services\UploadFileService;
 use App\User;
 use App\Exceptions\UserNotCreatedException;
 use App\Wrappers\UserCreateWrapper;
@@ -30,7 +31,7 @@ class RegisterService
      * @return User
      * @throws UserNotCreatedException
      */
-    public function registerUser(array $userData)
+    public function registerUser(array $userData, $avatar = null)
     {
         $credentials = [
             'name' => $userData['name'],

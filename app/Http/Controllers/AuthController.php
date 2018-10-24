@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ValidationFaildException;
+use App\Services\UploadFileService;
 use App\Services\UserValidationService;
 use App\User;
 use App\Wrappers\UserCreateWrapper;
@@ -42,6 +43,16 @@ class AuthController extends Controller
         try {
             $registerService = new RegisterService(new UserCreateWrapper());
             $user = $registerService->registerUser($request->all());
+
+            // new servic AvatarReplacer dependecy UploadFileService::uploadUserAvatar
+            if ($request->hasFile('avatar')) {
+                $user->avatar = UploadFileService::uploadUserAvatar($request->file('avatar'), $user->id);
+            }
+            else {
+                $user->avatar = 'storage/avatars/default.png';
+            }
+            $user->save();
+
             Auth::login($user);
             $token = auth('api')->attempt([
                 'email' => $request->email,

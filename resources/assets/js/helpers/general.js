@@ -34,7 +34,9 @@ export function getFormData(data, avatar) {
     let formData = new FormData();
     formData.append('email', data.form.email);
     formData.append('password', data.form.password);
-    formData.append('newPassword', data.form.newPassword);
+    if (data.form.newPassword !== undefined){
+        formData.append('newPassword', data.form.newPassword);
+    }
     formData.append('name', data.form.name);
 
     if (avatar.files[0] !== undefined) {

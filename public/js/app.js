@@ -1028,7 +1028,9 @@ function getFormData(data, avatar) {
     var formData = new FormData();
     formData.append('email', data.form.email);
     formData.append('password', data.form.password);
-    formData.append('newPassword', data.form.newPassword);
+    if (data.form.newPassword !== undefined) {
+        formData.append('newPassword', data.form.newPassword);
+    }
     formData.append('name', data.form.name);
 
     if (avatar.files[0] !== undefined) {
@@ -51816,6 +51818,8 @@ exports.push([module.i, "\n.error[data-v-5f3035c3] {\n  text-align: left;\n  col
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_auth__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_general__ = __webpack_require__(7);
+
 
 
 
@@ -51839,9 +51843,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.$store.dispatch("register");
 
-            Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["d" /* registration */])(this.$data.form).then(function (res) {
+            var formData = Object(__WEBPACK_IMPORTED_MODULE_1__helpers_general__["a" /* getFormData */])(this.$data, document.getElementById('avatar'));
+
+            Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["d" /* registration */])(formData).then(function (res) {
                 _this.$store.commit("registerSuccess", res);
-                _this.$router.push({ path: '/' });
+                //this.$router.push({path: '/'});
             }).catch(function (err) {
                 _this.$store.commit("registerFailed", err.response.data);
             });

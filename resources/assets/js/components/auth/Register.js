@@ -1,5 +1,6 @@
 
 import { registration } from "../../helpers/auth";
+import {getFormData} from "../../helpers/general";
 
 export default {
     name: "register",
@@ -18,10 +19,12 @@ export default {
         register() {
             this.$store.dispatch("register");
 
-            registration(this.$data.form)
+            let formData = getFormData(this.$data, document.getElementById('avatar'));
+
+            registration(formData)
                 .then(res => {
                     this.$store.commit("registerSuccess", res);
-                    this.$router.push({path: '/'});
+                    //this.$router.push({path: '/'});
                 })
                 .catch(err => {
                     this.$store.commit("registerFailed", err.response.data );
