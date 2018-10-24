@@ -13,6 +13,7 @@ class UserValidationService
     private const NAME_RULE = 'required|string|max:255';
     private const EMAIL_RULE = 'required|string|email|max:255|unique:users';
     private const PASSWORD_RULE = 'required|min:6';
+    private const AVATAR_RULE = 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048';
 
     /**
      * @var Validator $validator
@@ -39,6 +40,8 @@ class UserValidationService
             'name' => self::NAME_RULE,
             'email' => self::emailRule($id),
             'password'=> self::PASSWORD_RULE,
+            'newPassword' => 'nullable|'.self::PASSWORD_RULE,
+            'avatar' => self::AVATAR_RULE
         ]);
         if ($this->validator->fails()){
             throw new ValidationFaildException();
@@ -50,9 +53,7 @@ class UserValidationService
      */
     public function errors()
     {
-        if ($this->validator instanceof Validator)
-            return $this->validator->errors();
-        else [];
+        return $this->validator->errors();
     }
 
 }

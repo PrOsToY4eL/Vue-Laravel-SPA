@@ -27,14 +27,6 @@ class UsersController extends Controller
         /** @var User $user */
         $user = Auth::guard('api')->user();
 
-        if ($request->hasFile('avatar')) {
-
-            if ($user->avatar !== 'storage/avatars/default.png') {
-                unlink(public_path().$user->avatar);
-            }
-            $user->avatar = UploadFileService::uploadUserAvatar($request->file('avatar'), $user->id);
-            $user->save();
-        }
         try {
             /** @var UserValidationService $userValidationService */
             $userValidationService = new UserValidationService();
@@ -42,6 +34,18 @@ class UsersController extends Controller
         } catch (ValidationFaildException $e) {
             return response()->json($userValidationService->errors(), 401);
         }
+
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar !== 'storage/avatars/default.png') {
+                unlink(public_path().$user->avatar);
+            }
+            $user->avatar = UploadFileService::uploadUserAvatar($request->file('avatar'), $user->id);
+
+        }
+        else {
+            $user->avatar = 'storage/avatars/default.png';
+        }
+        $user->save();
 
         if (!Hash::check($request->password, $user->password)) {
             return response()->json(['errors' => ['Old password is invalid']], 401);

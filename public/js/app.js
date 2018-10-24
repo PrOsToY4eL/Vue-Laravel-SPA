@@ -53004,8 +53004,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             formData.append('name', this.form.name);
 
             var avatar = document.getElementById('avatar');
-
-            formData.append('avatar', avatar.files[0]);
+            if (avatar.files[0] !== undefined) formData.append('avatar', avatar.files[0]);else formData.append('avatar', '');
 
             this.$store.dispatch("edit");
 
