@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ValidationFaildException;
+use App\Services\AvatarReplacerService;
 use App\Services\UploadFileService;
 use App\Services\UserValidationService;
 use App\User;
@@ -35,17 +36,8 @@ class UsersController extends Controller
             return response()->json($userValidationService->errors(), 500);
         }
 
-        if ($request->hasFile('avatar')) {
-            if ($user->avatar !== 'storage/avatars/default.png') {
-                unlink(public_path().$user->avatar);
-            }
-            $user->avatar = UploadFileService::uploadUserAvatar($request->file('avatar'), $user->id);
-
-        }
-        else {
-            $user->avatar = 'storage/avatars/default.png';
-        }
-        $user->save();
+        $avatarReplacerService = new AvatarReplacerService(new UploadFileService(), $user);
+        $avatarReplacerService->replaceUserAvatar($request->file('avatar'));
 
         if (!Hash::check($request->password, $user->password)) {
             return response()->json(['errors' => ['Old password is invalid']], 500);

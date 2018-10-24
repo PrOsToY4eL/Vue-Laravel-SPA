@@ -20,7 +20,7 @@ class UploadFileService
      * @param int $user_id
      * @return string
      */
-    public static function uploadUserAvatar(UploadedFile $avatar, int $user_id):string
+    public function uploadUserAvatar(UploadedFile $avatar, int $user_id):string
     {
         $image = Image::make($avatar);
         $square = ($image->width() > $image->height()) ? $image->width() : $image->height();
