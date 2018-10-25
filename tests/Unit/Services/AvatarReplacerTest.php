@@ -37,9 +37,16 @@ class AvatarReplacerTest extends TestCase
         $this->avatarReplacerService = new AvatarReplacerService($uploadFileService, $userSaveWrapper);
 
     }
-    /**
-     * @return void
-     */
+
+    public function testAvatarReplaceWithDefault()
+    {
+        $request = new Request();
+
+        $user = $this->avatarReplacerService->replaceUserAvatar($request, $this->user);
+
+        $this->assertEquals($this->user->avatar, $user->avatar);
+    }
+
     public function testAvatarReplaceSuccess()
     {
        $avatar = UploadedFile::fake()->image('avatar.png', 100, 100)->size(100);
@@ -53,12 +60,14 @@ class AvatarReplacerTest extends TestCase
 
         $this->assertEquals(self::PATH, $user->avatar);
     }
+
     private function mockUploadFileService()
     {
         $mock = Mockery::mock(UploadFileService::class);
         $mock->shouldReceive('uploadUserAvatar')->andReturnUsing([$this, 'mockUploadUserAvatar']);
         return $mock;
     }
+
     private function mockUserSaveWrapper()
     {
         $mock = Mockery::mock(UserSaveWrapper::class);
@@ -68,7 +77,12 @@ class AvatarReplacerTest extends TestCase
 
     public function mockUploadUserAvatar(UploadedFile $avatar, int $user_id)
     {
-        return '/storage/avatars/user_'.$user_id.'.'.$avatar->getClientOriginalExtension();
+        if ($avatar instanceof UploadedFile) {
+            return '/storage/avatars/user_' . $user_id . '.' . $avatar->getClientOriginalExtension();
+        }
+        else {
+            return $this->user->avatar;
+        }
     }
 
     public function mockSaveUser(User $user)
