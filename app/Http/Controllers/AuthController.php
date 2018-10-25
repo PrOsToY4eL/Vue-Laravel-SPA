@@ -43,7 +43,7 @@ class AuthController extends Controller
             $user = $registerService->registerUser($request->all());
 
             $avatarReplacerService = new AvatarReplacerService(new UploadFileService(), new UserSaveWrapper());
-            $user = $avatarReplacerService->replaceUserAvatar($request, $user);
+            $avatarReplacerService->replaceUserAvatar($request, $user);
 
             Auth::login($user);
             $token = auth('api')->attempt([

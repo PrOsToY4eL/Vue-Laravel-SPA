@@ -38,7 +38,7 @@ class UsersController extends Controller
         }
 
         $avatarReplacerService = new AvatarReplacerService(new UploadFileService(), new UserSaveWrapper());
-        $user = $avatarReplacerService->replaceUserAvatar($request, $user);
+        $avatarReplacerService->replaceUserAvatar($request, $user);
 
         if (!Hash::check($request->password, $user->password)) {
             return response()->json(['errors' => ['Old password is invalid']], 500);

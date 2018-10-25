@@ -38,7 +38,7 @@ class AvatarReplacerService
     /**
      * @param Request $request
      * @param User $user
-     * @return User
+     * @return void
      */
     public function replaceUserAvatar(Request $request, User $user)
     {
@@ -50,6 +50,5 @@ class AvatarReplacerService
             $user->avatar = $this->uploadFileService->uploadUserAvatar($avatar, $user->id);
         }
         $this->userSaveWrapper->saveUser($user);
-        return $user;
     }
 }

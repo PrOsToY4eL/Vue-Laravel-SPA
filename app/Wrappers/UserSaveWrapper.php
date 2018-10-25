@@ -12,11 +12,10 @@ class UserSaveWrapper
 {
     /**
      * @param User $user
-     * @return User|null
+     * @return void
      */
     public static function saveUser(User $user)
     {
         $user->save();
-        return $user;
     }
 }

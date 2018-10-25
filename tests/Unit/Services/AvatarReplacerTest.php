@@ -35,30 +35,30 @@ class AvatarReplacerTest extends TestCase
         $userSaveWrapper = $this->mockUserSaveWrapper();
 
         $this->avatarReplacerService = new AvatarReplacerService($uploadFileService, $userSaveWrapper);
-
     }
 
     public function testAvatarReplaceWithDefault()
     {
+        $user = $this->user;
         $request = new Request();
 
-        $user = $this->avatarReplacerService->replaceUserAvatar($request, $this->user);
+        $this->avatarReplacerService->replaceUserAvatar($request, $this->user);
 
-        $this->assertEquals($this->user->avatar, $user->avatar);
+        $this->assertEquals($user->avatar, $this->user->avatar);
     }
 
     public function testAvatarReplaceSuccess()
     {
-       $avatar = UploadedFile::fake()->image('avatar.png', 100, 100)->size(100);
+        $avatar = UploadedFile::fake()->image('avatar.png', 100, 100)->size(100);
 
         $this->assertEquals(self::DEFAULT_PATH, $this->user->avatar);
 
         $request = new Request();
         $request->files->add(['avatar' => $avatar]);
 
-        $user = $this->avatarReplacerService->replaceUserAvatar($request, $this->user);
+        $this->avatarReplacerService->replaceUserAvatar($request, $this->user);
 
-        $this->assertEquals(self::PATH, $user->avatar);
+        $this->assertEquals(self::PATH, $this->user->avatar);
     }
 
     private function mockUploadFileService()
