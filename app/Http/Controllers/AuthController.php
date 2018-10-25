@@ -8,6 +8,7 @@ use App\Services\UploadFileService;
 use App\Services\UserValidationService;
 use App\User;
 use App\Wrappers\UserCreateWrapper;
+use App\Wrappers\UserSaveWrapper;
 use Auth;
 use Hash;
 use Illuminate\Http\Request;
@@ -37,16 +38,12 @@ class AuthController extends Controller
             /** @var UserValidationService $userValidationService */
             $userValidationService = new UserValidationService();
             $userValidationService->validateUser($request->all());
-        } catch (ValidationFaildException $e) {
-            return response()->json($userValidationService->errors(), 500);
-        }
 
-        try {
             $registerService = new RegisterService(new UserCreateWrapper());
             $user = $registerService->registerUser($request->all());
 
-            $avatarReplacerService = new AvatarReplacerService(new UploadFileService(), $user);
-            $avatarReplacerService->replaceUserAvatar($request->file('avatar'));
+            $avatarReplacerService = new AvatarReplacerService(new UploadFileService(), new UserSaveWrapper());
+            $user = $avatarReplacerService->replaceUserAvatar($request, $user);
 
             Auth::login($user);
             $token = auth('api')->attempt([
@@ -54,6 +51,9 @@ class AuthController extends Controller
                 'password' => $request->password
             ]);
             return $this->respondWithToken($token);
+
+        } catch (ValidationFaildException $e) {
+            return response()->json($userValidationService->errors(), 500);
         } catch (UserNotCreatedException $e){
             $response = new Response();
             $response->setStatusCode(500);

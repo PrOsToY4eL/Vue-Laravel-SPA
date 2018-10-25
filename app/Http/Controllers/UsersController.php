@@ -7,6 +7,7 @@ use App\Services\AvatarReplacerService;
 use App\Services\UploadFileService;
 use App\Services\UserValidationService;
 use App\User;
+use App\Wrappers\UserSaveWrapper;
 use Auth;
 use Illuminate\Http\Request;
 use Hash;
@@ -36,8 +37,8 @@ class UsersController extends Controller
             return response()->json($userValidationService->errors(), 500);
         }
 
-        $avatarReplacerService = new AvatarReplacerService(new UploadFileService(), $user);
-        $avatarReplacerService->replaceUserAvatar($request->file('avatar'));
+        $avatarReplacerService = new AvatarReplacerService(new UploadFileService(), new UserSaveWrapper());
+        $user = $avatarReplacerService->replaceUserAvatar($request, $user);
 
         if (!Hash::check($request->password, $user->password)) {
             return response()->json(['errors' => ['Old password is invalid']], 500);
